@@ -113,7 +113,7 @@
 
 <div class="container">
 
-  <!-- LOGIN -->
+  <!-- LOGIN / SIGN UP -->
   <div class="card" id="loginSection">
 
     <h1>Turn Your Skills Into Income 🚀</h1>
@@ -154,7 +154,7 @@
       <h2>GigBoost Pro</h2>
 
       <div class="price">
-        ₦8,000 / month
+        ₦5,000 / month
       </div>
 
       <p>
@@ -184,14 +184,16 @@
 
 <script>
 
-  // ================================
+  // =====================================
   // SUPABASE CONNECTION
-  // ================================
+  // =====================================
 
-  const SUPABASE_URL = "https://guseeksjsvhfcqpwokgd.supabase.co";
+  const SUPABASE_URL =
+    "https://guseeksjsvhfcqpwokgd.supabase.co";
 
   const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_jmsw_Ysc9_5GYnKr0asG3w_QiMi7t07";
+
 
   const supabaseClient =
     window.supabase.createClient(
@@ -200,9 +202,9 @@
     );
 
 
-  // ================================
+  // =====================================
   // CREATE ACCOUNT
-  // ================================
+  // =====================================
 
   async function signUp() {
 
@@ -212,29 +214,39 @@
     const message =
       document.getElementById("message");
 
+
     if (!email) {
-      message.innerText = "Please enter your email.";
+
+      message.innerText =
+        "Please enter your email.";
+
       return;
     }
+
 
     const { error } =
       await supabaseClient.auth.signUp({
         email: email
       });
 
+
     if (error) {
-      message.innerText = error.message;
+
+      message.innerText =
+        error.message;
+
       return;
     }
+
 
     message.innerText =
       "Account created! Check your email to confirm your account.";
   }
 
 
-  // ================================
+  // =====================================
   // LOGIN
-  // ================================
+  // =====================================
 
   async function login() {
 
@@ -244,29 +256,39 @@
     const message =
       document.getElementById("message");
 
+
     if (!email) {
-      message.innerText = "Please enter your email.";
+
+      message.innerText =
+        "Please enter your email.";
+
       return;
     }
+
 
     const { error } =
       await supabaseClient.auth.signInWithOtp({
         email: email
       });
 
+
     if (error) {
-      message.innerText = error.message;
+
+      message.innerText =
+        error.message;
+
       return;
     }
+
 
     message.innerText =
       "Login link sent! Check your email.";
   }
 
 
-  // ================================
-  // SHOW USER
-  // ================================
+  // =====================================
+  // CHECK USER
+  // =====================================
 
   async function checkUser() {
 
@@ -274,37 +296,47 @@
       data: { session }
     } = await supabaseClient.auth.getSession();
 
+
     if (session) {
 
-      document.getElementById("loginSection").style.display =
-        "none";
+      document.getElementById(
+        "loginSection"
+      ).style.display = "none";
 
-      document.getElementById("dashboard").style.display =
-        "block";
 
-      document.getElementById("userEmail").innerText =
-        session.user.email;
+      document.getElementById(
+        "dashboard"
+      ).style.display = "block";
 
+
+      document.getElementById(
+        "userEmail"
+      ).innerText = session.user.email;
     }
   }
 
 
-  // ================================
+  // =====================================
   // LOGOUT
-  // ================================
+  // =====================================
 
   async function logout() {
 
     await supabaseClient.auth.signOut();
 
-    document.getElementById("dashboard").style.display =
-      "none";
 
-    document.getElementById("loginSection").style.display =
-      "block";
+    document.getElementById(
+      "dashboard"
+    ).style.display = "none";
+
+
+    document.getElementById(
+      "loginSection"
+    ).style.display = "block";
   }
 
 
+  // Check for an existing login
   checkUser();
 
 </script>
