@@ -1,345 +1,122 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GigBoost</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: #f5f7fb;
-      color: #111827;
-    }
-
-    header {
-      background: #111827;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 50px auto;
-      padding: 20px;
-    }
-
-    .card {
-      background: white;
-      padding: 30px;
-      border-radius: 18px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-      text-align: center;
-    }
-
-    h1 {
-      margin-bottom: 12px;
-    }
-
-    p {
-      color: #6b7280;
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-
-    input {
-      width: 100%;
-      padding: 14px;
-      margin: 8px 0;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      font-size: 16px;
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 12px;
-      border: none;
-      border-radius: 10px;
-      background: #111827;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      opacity: 0.9;
-    }
-
-    .pro {
-      margin-top: 25px;
-      padding: 20px;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-    }
-
-    .price {
-      font-size: 30px;
-      font-weight: bold;
-      margin: 15px 0;
-    }
-
-    #dashboard {
-      display: none;
-    }
-
-    .logout {
-      background: #dc2626;
-    }
-
-    #message {
-      margin-top: 15px;
-      font-size: 14px;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GigBoost</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;color:#fff;font-family:Inter,Arial,sans-serif;background:#050817;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:-40%;z-index:-2;background:conic-gradient(from 0deg,transparent,#702cff22,transparent 25%,#28a9ff18,transparent 55%);filter:blur(70px);animation:spin 18s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes float{50%{transform:translateY(-10px)}}@keyframes glow{50%{box-shadow:0 0 45px #8d35ff22}}
+.wrap{width:min(1120px,92%);margin:auto}.nav{padding:24px 0;display:flex;justify-content:space-between}.brand{font-size:25px;font-weight:900}.brand b{color:#a855ff}.hero{display:grid;grid-template-columns:1fr 1fr;gap:45px;align-items:center;padding:55px 0}
+.pill{display:inline-block;padding:9px 14px;border:1px solid #9b4dff55;border-radius:99px;color:#caa9ff;background:#7b35ff18;font-size:13px}
+h1{font-size:clamp(48px,6vw,76px);line-height:.98;letter-spacing:-4px;margin:22px 0}.grad{background:linear-gradient(90deg,#fff,#b86cff,#61c7ff);color:transparent;background-clip:text;-webkit-background-clip:text}
+.lead{color:#aab2c8;font-size:18px;line-height:1.65}.checks{display:grid;gap:15px;margin-top:28px}.check{display:flex;gap:12px;align-items:center}.ico{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#8d35ff22}
+.check small{display:block;color:#8992aa;margin-top:4px}
+.auth{border:1px solid #ffffff18;background:#0b1123cc;backdrop-filter:blur(20px);border-radius:24px;overflow:hidden;animation:glow 5s infinite}
+.tabs{display:grid;grid-template-columns:1fr 1fr}.tab{padding:18px;background:none;border:0;color:#8d96ad;font-weight:700}.tab.active{color:#fff;border-bottom:2px solid #a855ff}
+.authbody{padding:30px}.authbody h2{text-align:center}.sub{text-align:center;color:#8d96ad;margin-bottom:24px}label{display:block;font-size:13px;color:#bfc6d8;margin:13px 0 7px}
+input{width:100%;padding:15px;border-radius:11px;border:1px solid #ffffff16;background:#050a18;color:#fff;font-size:15px;outline:0}input:focus{border-color:#9b4dff}
+button{cursor:pointer}.primary,.secondary{width:100%;padding:15px;border-radius:11px;margin-top:15px;font-weight:800;font-size:15px}.primary{border:0;color:#fff;background:linear-gradient(100deg,#8d35ff,#55b8ff)}.secondary{background:none;border:1px solid #ffffff18;color:#fff}.link{border:0;background:none;color:#b56cff}.row{display:flex;justify-content:space-between;align-items:center;margin-top:13px;font-size:13px}.msg{text-align:center;min-height:22px;margin-top:13px;color:#aeb7cc;font-size:13px}
+.scene{height:180px;border:1px solid #ffffff12;border-radius:20px;position:relative;overflow:hidden;background:linear-gradient(#111938,#080c1b)}.moon{position:absolute;right:12%;top:25px;width:62px;height:62px;border-radius:50%;background:#e0eaff;box-shadow:0 0 45px #b7d5ff55}.mount{position:absolute;bottom:-65px;width:110%;height:155px;background:#10162e;clip-path:polygon(0 100%,20% 45%,33% 72%,49% 20%,63% 68%,77% 35%,100% 100%)}.trav{position:absolute;bottom:28px;left:25%;font-size:38px;animation:float 3s ease-in-out infinite}.float{position:absolute;right:8%;top:18%;padding:10px;border:1px solid #ffffff18;background:#080d1dcc;border-radius:12px;animation:float 4s infinite}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:30px 0 70px}.feature{padding:24px;border:1px solid #ffffff12;border-radius:18px;background:#0c1225aa;animation:float 6s ease-in-out infinite}.feature:nth-child(2){animation-delay:1s}.feature:nth-child(3){animation-delay:2s}.feature p{color:#929bb2;line-height:1.6}
+.dashboard{display:none;padding:50px 0}.panel{padding:25px;border:1px solid #ffffff12;border-radius:20px;background:#0c1225bb;margin-bottom:20px}.price{font-size:38px;font-weight:900}
+footer{border-top:1px solid #ffffff10;padding:25px 0;color:#737c94;display:flex;justify-content:space-between}
+@media(max-width:800px){.hero{grid-template-columns:1fr;padding-top:25px}.features{grid-template-columns:1fr}h1{letter-spacing:-2px}.nav{padding-bottom:5px}}
+</style>
 </head>
-
 <body>
+<div class="wrap">
+<div class="nav"><div class="brand"><b>ϟ</b> GigBoost</div><div style="color:#8891a8">Turn skills into income.</div></div>
 
-<header>
-  <h2>GigBoost</h2>
-</header>
-
-<div class="container">
-
-  <!-- LOGIN / SIGN UP -->
-  <div class="card" id="loginSection">
-
-    <h1>Turn Your Skills Into Income 🚀</h1>
-
-    <p>
-      Create your GigBoost account and get access to tools
-      designed to help freelancers grow.
-    </p>
-
-    <input
-      type="email"
-      id="email"
-      placeholder="Enter your email"
-    >
-
-    <button onclick="signUp()">
-      Create Account
-    </button>
-
-    <button onclick="login()">
-      Login
-    </button>
-
-    <div id="message"></div>
-
-  </div>
-
-
-  <!-- DASHBOARD -->
-  <div class="card" id="dashboard">
-
-    <h1>Welcome to GigBoost 🎉</h1>
-
-    <p id="userEmail"></p>
-
-    <div class="pro">
-
-      <h2>GigBoost Pro</h2>
-
-      <div class="price">
-        ₦5,000 / month
-      </div>
-
-      <p>
-        Unlock the full GigBoost experience.
-      </p>
-
-      <a
-        href="https://paystack.shop/pay/tgv56-mcew"
-        target="_blank"
-        style="text-decoration:none;"
-      >
-        <button>
-          Get GigBoost Pro
-        </button>
-      </a>
-
-    </div>
-
-    <button class="logout" onclick="logout()">
-      Logout
-    </button>
-
-  </div>
-
+<main id="landing">
+<section class="hero">
+<div>
+<span class="pill">🚀 Empowering Freelancers</span>
+<h1>Turn Your Skills<br><span class="grad">Into Income.</span></h1>
+<p class="lead">Tools, resources and guidance designed to help freelancers find opportunities, work smarter and grow.</p>
+<div class="checks">
+<div class="check"><div class="ico">✦</div><div><b>Find opportunities</b><small>Practical tools for freelance growth.</small></div></div>
+<div class="check"><div class="ico">⚡</div><div><b>Work smarter</b><small>Templates and guided workflows.</small></div></div>
+<div class="check"><div class="ico">↗</div><div><b>Grow your business</b><small>Build a stronger freelance brand.</small></div></div>
+</div>
 </div>
 
+<div class="auth">
+<div class="tabs"><button class="tab active" id="pwTab" onclick="passwordMode()">✉ Email & Password</button><button class="tab" id="otpTab" onclick="otpMode()">▣ Login with Code</button></div>
+<div class="authbody" id="pwBox">
+<h2 id="title">Welcome back! 👋</h2><div class="sub" id="sub">Log in to your GigBoost account</div>
+<label>Email</label><input id="email" type="email" placeholder="you@example.com">
+<label id="passLabel">Password</label><input id="password" type="password" placeholder="Enter your password">
+<div class="row"><span></span><button class="link" onclick="forgot()">Forgot password?</button></div>
+<button class="primary" id="mainBtn" onclick="submitAuth()">Login</button>
+<button class="secondary" onclick="signup()">Create New Account</button>
+<div class="msg" id="msg"></div>
+</div>
+
+<div class="authbody" id="otpBox" style="display:none">
+<h2>Login with a Code 🔐</h2><div class="sub">We'll send a verification code to your email.</div>
+<label>Email</label><input id="otpEmail" type="email" placeholder="you@example.com">
+<button class="primary" onclick="sendOtp()">Send Verification Code</button>
+<div id="verifyBox" style="display:none"><label>Verification code</label><input id="otpCode" inputmode="numeric" maxlength="6" placeholder="6-digit code"><button class="primary" onclick="verifyOtp()">Verify & Continue</button></div>
+<div class="msg" id="otpMsg"></div>
+</div>
+</div>
+</section>
+
+<div class="scene"><div class="moon"></div><div class="mount"></div><div class="trav">🎒</div><div class="float">✨ Your next level starts here</div></div>
+<section class="features">
+<div class="feature"><div style="font-size:30px">🚀</div><h3>Built for Freelancers</h3><p>Everything you need to build and grow your freelance journey.</p></div>
+<div class="feature"><div style="font-size:30px">🛡️</div><h3>Secure & Private</h3><p>Authentication and sessions are handled through Supabase.</p></div>
+<div class="feature"><div style="font-size:30px">🏆</div><h3>GigBoost Pro</h3><p>Premium access for <b>₦5,000/month</b>.</p></div>
+</section>
+</main>
+
+<section class="dashboard" id="dash">
+<div class="panel"><p style="color:#8992aa">WELCOME BACK</p><h1 style="font-size:42px;letter-spacing:-2px" id="dashTitle">GigBoost</h1><p id="dashEmail" style="color:#8992aa"></p></div>
+<div class="panel"><h2>GigBoost Pro</h2><div class="price">₦5,000</div><p style="color:#8992aa">per month</p><a href="https://paystack.shop/pay/tgv56-mcew" target="_blank" rel="noopener"><button class="primary">Upgrade to Pro</button></a><button class="secondary" onclick="logout()">Log out</button></div>
+</section>
+<footer><span>⚡ GigBoost © 2026</span><span>Built for freelancers.</span></footer>
+</div>
 
 <script>
+const SUPABASE_URL="https://guseeksjsvhfcqpwokgd.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_jmsw_Ysc9_5GYnKr0asG3w_QiMi7t07";
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+let signupMode=false;
 
-  // =====================================
-  // SUPABASE CONNECTION
-  // =====================================
-
-  const SUPABASE_URL =
-    "https://guseeksjsvhfcqpwokgd.supabase.co";
-
-  const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_jmsw_Ysc9_5GYnKr0asG3w_QiMi7t07";
-
-
-  const supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY
-    );
-
-
-  // =====================================
-  // CREATE ACCOUNT
-  // =====================================
-
-  async function signUp() {
-
-    const email =
-      document.getElementById("email").value.trim();
-
-    const message =
-      document.getElementById("message");
-
-
-    if (!email) {
-
-      message.innerText =
-        "Please enter your email.";
-
-      return;
-    }
-
-
-    const { error } =
-      await supabaseClient.auth.signUp({
-        email: email
-      });
-
-
-    if (error) {
-
-      message.innerText =
-        error.message;
-
-      return;
-    }
-
-
-    message.innerText =
-      "Account created! Check your email to confirm your account.";
-  }
-
-
-  // =====================================
-  // LOGIN
-  // =====================================
-
-  async function login() {
-
-    const email =
-      document.getElementById("email").value.trim();
-
-    const message =
-      document.getElementById("message");
-
-
-    if (!email) {
-
-      message.innerText =
-        "Please enter your email.";
-
-      return;
-    }
-
-
-    const { error } =
-      await supabaseClient.auth.signInWithOtp({
-        email: email
-      });
-
-
-    if (error) {
-
-      message.innerText =
-        error.message;
-
-      return;
-    }
-
-
-    message.innerText =
-      "Login link sent! Check your email.";
-  }
-
-
-  // =====================================
-  // CHECK USER
-  // =====================================
-
-  async function checkUser() {
-
-    const {
-      data: { session }
-    } = await supabaseClient.auth.getSession();
-
-
-    if (session) {
-
-      document.getElementById(
-        "loginSection"
-      ).style.display = "none";
-
-
-      document.getElementById(
-        "dashboard"
-      ).style.display = "block";
-
-
-      document.getElementById(
-        "userEmail"
-      ).innerText = session.user.email;
-    }
-  }
-
-
-  // =====================================
-  // LOGOUT
-  // =====================================
-
-  async function logout() {
-
-    await supabaseClient.auth.signOut();
-
-
-    document.getElementById(
-      "dashboard"
-    ).style.display = "none";
-
-
-    document.getElementById(
-      "loginSection"
-    ).style.display = "block";
-  }
-
-
-  // Check for an existing login
-  checkUser();
-
+function passwordMode(){pwBox.style.display="block";otpBox.style.display="none";pwTab.classList.add("active");otpTab.classList.remove("active")}
+function otpMode(){pwBox.style.display="none";otpBox.style.display="block";pwTab.classList.remove("active");otpTab.classList.add("active")}
+function setMsg(t,c=""){msg.textContent=t;msg.style.color=c==="error"?"#ff8e9e":c==="ok"?"#52dfaa":"#aeb7cc"}
+function signup(){signupMode=true;title.textContent="Create your account 🚀";sub.textContent="Join GigBoost and start growing.";mainBtn.textContent="Create Account";setMsg("")}
+async function submitAuth(){
+ const e=email.value.trim(),p=password.value;
+ if(!e){setMsg("Please enter your email.","error");return}
+ if(!p||p.length<6){setMsg("Password must be at least 6 characters.","error");return}
+ const r=signupMode?await sb.auth.signUp({email:e,password:p,options:{emailRedirectTo:location.href}}):await sb.auth.signInWithPassword({email:e,password:p});
+ if(r.error){setMsg(r.error.message,"error");return}
+ if(signupMode&&!r.data.session){setMsg("Account created! Check your email to verify it.","ok");return}
+ showDash(r.data.session)
+}
+async function forgot(){
+ const e=email.value.trim();if(!e){setMsg("Enter your email first.","error");return}
+ const r=await sb.auth.resetPasswordForEmail(e,{redirectTo:location.href});
+ setMsg(r.error?r.error.message:"Password reset email sent. Check your inbox.",r.error?"error":"ok")
+}
+async function sendOtp(){
+ const e=otpEmail.value.trim();if(!e){otpMsg.textContent="Enter your email first.";return}
+ const r=await sb.auth.signInWithOtp({email:e,options:{shouldCreateUser:false}});
+ if(r.error){otpMsg.textContent=r.error.message;return}
+ verifyBox.style.display="block";otpMsg.textContent="Code sent. Check your email.";otpMsg.style.color="#52dfaa"
+}
+async function verifyOtp(){
+ const r=await sb.auth.verifyOtp({email:otpEmail.value.trim(),token:otpCode.value.trim(),type:"email"});
+ if(r.error){otpMsg.textContent=r.error.message;return}showDash(r.data.session)
+}
+function showDash(s){if(!s)return;landing.style.display="none";dash.style.display="block";dashEmail.textContent=s.user.email;scrollTo({top:0,behavior:"smooth"})}
+async function logout(){await sb.auth.signOut();dash.style.display="none";landing.style.display="block";scrollTo({top:0,behavior:"smooth"})}
+sb.auth.getSession().then(({data})=>{if(data.session)showDash(data.session)});
 </script>
-
 </body>
-  </html>
+                                     </html>
